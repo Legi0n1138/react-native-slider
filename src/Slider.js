@@ -231,6 +231,7 @@ export default class Slider extends PureComponent {
       thumbTouchSize,
       animationType,
       animateTransitions,
+      step,
       ...other
     } = this.props;
     const {
@@ -282,6 +283,20 @@ export default class Slider extends PureComponent {
           renderToHardwareTextureAndroid
           onLayout={this._measureTrack}
         />
+        <View style={defaultStyles.dotContainer}>
+          {Array.from({length: 1/step+1}).map((emptyItem, index) =>
+            <View
+              style={[
+                defaultStyles.dot,
+                {backgroundColor: step*index > other.value
+                    ? maximumTrackTintColor
+                    : minimumTrackTintColor
+                }
+              ]}
+              key={index}
+            />
+          )}
+        </View>
         <Animated.View
           renderToHardwareTextureAndroid
           style={[mainStyles.track, trackStyle, minimumTrackStyle]}
@@ -594,4 +609,15 @@ var defaultStyles = StyleSheet.create({
     backgroundColor: 'green',
     opacity: 0.5,
   },
+  dotContainer: {
+    position: 'absolute',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  dot: {
+    width: 12,
+    height: 12,
+    borderRadius: 90,
+  }
 });
